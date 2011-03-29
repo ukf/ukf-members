@@ -15,6 +15,7 @@
  */
 package uk.org.ukfederation.members;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -109,6 +110,16 @@ public class Members {
 		this(JAXB.unmarshal(makeDOMSource(doc), MembersElement.class));
 	}
 	
+	/**
+	 * Constructs a {@link Members} object from an XML document referred to as a
+	 * {@link File}.
+	 * 
+	 * @param file File to be converted into a {@link Members} object.
+	 */
+	public Members(File file) {
+		this(JAXB.unmarshal(file, MembersElement.class));
+	}
+
 	/**
 	 * Checks for a legitimate entity owner name: either the name of a federation member
 	 * or the name of a known non-member entity owner.

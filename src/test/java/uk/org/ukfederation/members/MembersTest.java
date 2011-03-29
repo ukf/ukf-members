@@ -13,7 +13,9 @@
  */
 package uk.org.ukfederation.members;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -80,6 +82,16 @@ public class MembersTest {
 	@Test
 	public void testConstructorDocument() throws Exception {
 		Members m = new Members(fetchDocument("oneOfEach.xml"));
+		Assert.assertTrue(m.isOwnerName("Valid Member"));
+		Assert.assertTrue(m.isOwnerName("Valid Non Member"));
+		Assert.assertFalse(m.isOwnerName("Should not be present"));
+	}
+	
+	@Test
+	public void testConstructorFile() throws Exception {
+		URL u = MembersTest.class.getResource("/oneOfEach.xml");
+		File f = new File(u.toURI());
+		Members m = new Members(f);
 		Assert.assertTrue(m.isOwnerName("Valid Member"));
 		Assert.assertTrue(m.isOwnerName("Valid Non Member"));
 		Assert.assertFalse(m.isOwnerName("Should not be present"));
