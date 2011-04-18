@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.org.ukfederation</groupId>
   <artifactId>ukf-members</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>UK federation members</name>
   <description>API to access the UK federation members.xml database.</description>
   
