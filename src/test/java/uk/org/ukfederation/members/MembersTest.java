@@ -152,5 +152,23 @@ public class MembersTest {
         Diff diff = new Diff(ok, ou);
         Assert.assertTrue(diff.identical(), "diff comparison should have been identical: " + diff);
     }
+    
+    /**
+     * Test scopes pushed from within the members document to entities.
+     * 
+     * @throws Exception if anything goes wrong.
+     */
+    @Test
+    public void testPushedScopes() throws Exception {
+        Document in = fetchDocument("pushedScopesIn.xml");
+        Document tr = fetchDocument("pushedScopes.xsl");
+        Document ok = fetchDocument("pushedScopesOK.xml");
+        Transformer t = tFactory.newTransformer(new DOMSource(tr));
+        DOMResult out = new DOMResult();
+        t.transform(new DOMSource(in), out);
+        Document ou = (Document) (out.getNode());
+        Diff diff = new Diff(ok, ou);
+        Assert.assertTrue(diff.identical(), "diff comparison should have been identical: " + diff);
+    }
 
 }

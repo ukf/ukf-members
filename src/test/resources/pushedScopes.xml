@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Members
+    xmlns="http://ukfederation.org.uk/2007/01/members"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ukfederation.org.uk/2007/01/members ukfederation-members.xsd">
+    <Member>
+        <Name>member1</Name>
+        <JoinDate>2008-04-29</JoinDate>
+        <Scopes>
+            <Entity>entity1</Entity>
+            <Scope>iay.org.uk</Scope>
+        </Scopes>
+    </Member>
+    <Member>
+        <Name>member2</Name>
+        <JoinDate>2011-01-01</JoinDate>
+        <Scopes>
+            <Entity>entity1</Entity>
+            <Entity>entity2</Entity>
+            <Scope>example.com</Scope>
+            <Scope>ed.ac.uk</Scope>
+        </Scopes>
+        <Scopes>
+            <Entity>entity1</Entity>
+            <Scope>sub.ed.ac.uk</Scope>
+        </Scopes>
+    </Member>
+</Members>

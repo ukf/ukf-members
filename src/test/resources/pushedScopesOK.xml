@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results>
+    <result id="entity1">
+        <Scope regex="false">iay.org.uk</Scope>
+        <Scope regex="false">example.com</Scope>
+        <Scope regex="false">ed.ac.uk</Scope>
+        <Scope regex="false">sub.ed.ac.uk</Scope>
+    </result>
+    <result id="entity2">
+        <Scope regex="false">example.com</Scope>
+        <Scope regex="false">ed.ac.uk</Scope>
+    </result>
+    <result id="entity3">
+    </result>
+</results>

@@ -18,18 +18,28 @@ package uk.org.ukfederation.members;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.JAXB;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
 import uk.org.ukfederation.members.jaxb.NonMemberElement;
+import uk.org.ukfederation.members.jaxb.ScopesElement;
 
 /**
  * Java bean representing the whole of the members.xml file.
@@ -50,14 +60,32 @@ public class Members {
      * Set of all the owner names within the members document.
      */
     private final Set<String> ownerNames = new HashSet<String>();
+    
+    /**
+     * Collections of (non-regex) scopes pushed to each entity.
+     * 
+     * This is initialised the first time it is needed.
+     */
+    private Map<String, List<String>> pushedScopes;
 
+    /**
+     * Local namespace-aware {@link DocumentBuilderFactory} for use in creating DOM results.
+     */
+    private final DocumentBuilderFactory dbf;
+    
     /**
      * Internal constructor, called by all public constructors.
      * 
      * @param m The {@link MembersElement} on which to base the new bean.
      */
     private Members(MembersElement m) {
-        this.membersElement = m;
+        membersElement = m;
+        
+        /*
+         * Initialise the local DocumentBuilder so that we can create DOM outputs.
+         */
+        dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
 
         /*
          * Collect names of members.
@@ -131,6 +159,75 @@ public class Members {
      */
     public boolean isOwnerName(final String s) {
         return ownerNames.contains(s);
+    }
+    
+    /**
+     * Collect all of the scopes mentioned in Scopes elements for different
+     * members.  Store these away in a map that allows us to retrieve them
+     * by reference to the entityID which they were pushed to.
+     */
+    private void collectPushedScopes() {
+        // initialise the map we store everything in
+        pushedScopes = new HashMap<String, List<String>>();
+        
+        // loop through each Member element
+        for (MemberElement member : membersElement.getMember()) {
+            
+            // each Member may have multiple Scopes elements
+            for (ScopesElement scopesElement: member.getScopes()) {
+                
+                // each Scopes may have many Entity elements
+                List<String> entities = scopesElement.getEntity();
+                
+                // each Scopes may have many Scope elements
+                List<String> scopes = scopesElement.getScope();
+                
+                // Register each of those scopes for each of those entities
+                for (String entityID: entities) {
+                    List<String> scopeList = pushedScopes.get(entityID);
+                    if (scopeList == null) {
+                        // first mention of this entity
+                        pushedScopes.put(entityID, new ArrayList<String>(scopes));
+                    } else {
+                        // entity has a list already, add in the new ones
+                        scopeList.addAll(scopes);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Computes the "pushed" scope list for the named entity.
+     * 
+     * @param entityID name of the entity
+     * @return ordered list of scope elements to be added to the entity
+     * @throws ParserConfigurationException if creating the result {@link Document} fails
+     */
+    public NodeList scopesForEntity(final String entityID) throws ParserConfigurationException {
+        
+        // retrieve the pushed scopes if they have not already been retrieved
+        if (pushedScopes == null) {
+            collectPushedScopes();
+        }
+        
+        // acquire the list of scopes associated with this entityID, or null
+        List<String> scopes = pushedScopes.get(entityID);
+        
+        // manufacture an appropriate DocumentFragment
+        Document doc = dbf.newDocumentBuilder().newDocument();
+        DocumentFragment frag = doc.createDocumentFragment();
+        if (scopes != null) {
+            for (String scope: scopes) {
+                Element e = doc.createElementNS("urn:mace:shibboleth:metadata:1.0", "Scope");
+                e.setAttribute("regex", "false");
+                e.setTextContent(scope);
+                frag.appendChild(e);
+            }
+        }
+        
+        // return the collected nodes as a NodeList
+        return frag.getChildNodes();
     }
 
 }
