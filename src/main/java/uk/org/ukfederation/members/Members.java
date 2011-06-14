@@ -102,6 +102,8 @@ public class Members {
     }
 
     /**
+     * Helper method for constructors.
+     * 
      * Returns a {@link DOMSource} derived from the provided DOM {@link Node}. If the node is a {@link Document}, dig
      * down to its document element. This sometimes helps JAXB when called from within Xalan.
      * 

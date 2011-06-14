@@ -42,23 +42,50 @@ import org.w3c.dom.Document;
  */
 public class MembersTest {
 
+    /** Document builder factory used by every test. */
     private DocumentBuilderFactory dbFactory;
 
+    /** Transformer factory used by many tests. */
     private TransformerFactory tFactory;
 
+    /**
+     * Acquire a stream for the named test resource.
+     * 
+     * @param resourceName name of the resource to acquire
+     * @return {@InputStream} to the resource
+     */
     private InputStream streamResource(String resourceName) {
         return MembersTest.class.getResourceAsStream("/" + resourceName);
     }
 
+    /**
+     * Fetch a {@link Members} object corresponding to the named resource.
+     * 
+     * @param resourceName name of the resource
+     * @return {@link Members} object corresponding to the resource.
+     */
     private Members fetchMembers(String resourceName) {
         return new Members(streamResource(resourceName));
     }
 
+    /**
+     * Fetch an XML {@link Document} from the named resource.
+     * 
+     * @param resourceName name of the resource to parse
+     * @return the resource as a {@link Document}
+     * 
+     * @throws Exception if anything goes wrong
+     */
     private Document fetchDocument(String resourceName) throws Exception {
         DocumentBuilder db = dbFactory.newDocumentBuilder();
         return db.parse(streamResource(resourceName));
     }
 
+    /**
+     * Setup performed before any test is run.
+     * 
+     * @throws Exception is anything goes wrong.
+     */
     @BeforeClass
     public void setUp() throws Exception {
         dbFactory = DocumentBuilderFactory.newInstance();
@@ -93,6 +120,11 @@ public class MembersTest {
         Assert.assertFalse(m.isOwnerName("Should not be present"));
     }
 
+    /**
+     * Tests the {@link File} constructor.
+     * 
+     * @throws Exception is anything goes wrong
+     */
     @Test
     public void testConstructorFile() throws Exception {
         URL u = MembersTest.class.getResource("/oneOfEach.xml");
