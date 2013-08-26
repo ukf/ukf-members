@@ -16,6 +16,23 @@
     <name>UK federation members</name>
     <description>API to access the UK federation members.xml database.</description>
 
+    <repositories>
+        <repository>
+            <id>shib-release</id>
+            <url>https://build.shibboleth.net/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>shib-snapshot</id>
+            <url>https://build.shibboleth.net/nexus/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <!-- Runtime dependencies -->
