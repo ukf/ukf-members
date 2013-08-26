@@ -65,17 +65,19 @@
         <plugins>
 
             <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.7.5</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.5</version>
                 <configuration>
-                    <generatePackage>uk.org.ukfederation.members.jaxb</generatePackage>
-                    <removeOldOutput>true</removeOldOutput>
+                    <schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
+                    <bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+                    <packageName>uk.org.ukfederation.members.jaxb</packageName>
+                    <clearOutputDir>true</clearOutputDir>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>xjc</goal>
                         </goals>
                     </execution>
                 </executions>
