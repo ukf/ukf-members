@@ -16,6 +16,10 @@
     <name>UK federation members</name>
     <description>API to access the UK federation members.xml database.</description>
 
+    <properties>
+        <checkstyle.configLocation>checkstyle.xml</checkstyle.configLocation>
+    </properties>
+
     <repositories>
         <repository>
             <id>shib-release</id>
