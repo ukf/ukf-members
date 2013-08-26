@@ -5,7 +5,7 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: UK federation
+    Checkstyle-Configuration: Shibboleth Checkstyle
     Description: none
 -->
 <module name="Checker">
@@ -14,6 +14,7 @@
     <property name="tabWidth" value="4"/>
     <module name="JavadocMethod">
       <property name="allowThrowsTagsForSubclasses" value="true"/>
+      <property name="allowUndeclaredRTE" value="true"/>
     </module>
     <module name="JavadocType"/>
     <module name="JavadocVariable"/>
@@ -37,7 +38,7 @@
       <property name="max" value="120"/>
     </module>
     <module name="MethodLength">
-      <property name="max" value="50"/>
+      <property name="max" value="70"/>
     </module>
     <module name="ParameterNumber">
       <property name="max" value="5"/>
@@ -50,7 +51,6 @@
     <module name="LeftCurly"/>
     <module name="NeedBraces"/>
     <module name="RightCurly"/>
-    <module name="AvoidInlineConditionals"/>
     <module name="EmptyStatement"/>
     <module name="EqualsHashCode"/>
     <module name="HiddenField"/>
@@ -76,14 +76,13 @@
     <module name="DeclarationOrder"/>
     <module name="ExplicitInitialization"/>
     <module name="FallThrough"/>
-    <module name="IllegalCatch"/>
     <module name="IllegalThrows"/>
     <module name="JUnitTestCase"/>
     <module name="MultipleVariableDeclarations"/>
     <module name="PackageDeclaration"/>
     <module name="ParameterAssignment"/>
     <module name="ReturnCount">
-      <property name="max" value="4"/>
+      <property name="max" value="8"/>
     </module>
     <module name="StringLiteralEquality"/>
     <module name="SuperFinalize"/>
@@ -102,8 +101,8 @@
   <module name="FileLength">
     <property name="max" value="1000"/>
   </module>
-  <module name="Header">
-    <property name="header" value="/*\n * Copyright (C) 2013 University of Edinburgh.\n *\n * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *    http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n"/>
+  <module name="RegexpHeader">
+    <property name="header" value="^/\*$\n^ \* Copyright \(C\) 20\d\d University of Edinburgh\.$\n^ \*$\n^ \* Licensed under the Apache License, Version 2\.0 \(the &quot;License&quot;\);$\n^ \* you may not use this file except in compliance with the License\.$\n^ \* You may obtain a copy of the License at$\n^ \*$\n^ \*    http://www\.apache\.org/licenses/LICENSE-2\.0$\n^ \*$\n^ \* Unless required by applicable law or agreed to in writing, software$\n^ \* distributed under the License is distributed on an &quot;AS IS&quot; BASIS,$\n^ \* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied\.$\n^ \* See the License for the specific language governing permissions and$\n^ \* limitations under the License\.$\n^ \*/$\n"/>
   </module>
   <module name="JavadocPackage"/>
 </module>
