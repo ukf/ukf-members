@@ -189,16 +189,6 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="includeSubDomains" type="xs:boolean" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            If true, the grant is for the given domain and all sub-domains.
-                            
-                            If false or absent, the grant is for the given fully qualified
-                            domain name only.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="lastVerified" type="xs:date" use="optional">
                     <xs:annotation>
                         <xs:documentation>
