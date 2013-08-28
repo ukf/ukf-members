@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.3">
+    version="1.4">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -174,6 +174,134 @@
         </xs:complexType>
     </xs:element>
     
+    <xs:complexType name="baseGrantType">
+        <xs:annotation>
+            <xs:documentation>
+                Base type for all kinds of domain grant.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="members:dnsNameType">
+                <xs:attribute name="to" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Name of the federation member the grant has been made to.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="includeSubDomains" type="xs:boolean" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            If true, the grant is for the given domain and all sub-domains.
+                            
+                            If false or absent, the grant is for the given fully qualified
+                            domain name only.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="lastVerified" type="xs:date" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            The date on which this grant was last verified.
+                            May be omitted if the verification
+                            date is not known.
+                            
+                            Example:    "2010-12-31"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="verifiedBy" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Name or user ID of the person or group who last verified
+                            the grant.  May be omitted for automatically generated elements.
+                            
+                            Examples:    "iay", "JTAG"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="source" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A human-readable description of the source of the association of this domain
+                            with the member.
+                            
+                            Examples:    "Call 1234"
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A URL providing more detailed information to go along with the
+                            @source attribute.  This need only be included when it adds
+                            information that would be hard to retrieve from other records.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:element name="Grant">
+        <xs:annotation>
+            <xs:documentation>
+                Records a grant of a fully qualified domain name to a federation member
+                for their use in a specific entity registration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:baseGrantType">
+                    <xs:attribute name="entityID" type="xs:anyURI" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The entity ID of the entity that the grant has been made for.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="GrantAll">
+        <xs:annotation>
+            <xs:documentation>
+                Records a grant of a fully qualified domain name *and all subdomains*
+                to a federation member for their use in *any* entity registrations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:baseGrantType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            This element is given its own complex content type simply for
+                            JAXB's benefit.  Its type is really just members:baseGrantType.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Grants">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    A list of domain grants to federation members.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:choice>
+                    <xs:element ref="members:Grant"/>
+                    <xs:element ref="members:GrantAll"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
     <xs:element name="PrimaryScope" type="members:dnsNameType">
         <xs:annotation>
             <xs:documentation>
@@ -261,6 +389,8 @@
                         </xs:element>
                         
                         <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
+
+                        <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
                         
                         <xs:element ref="members:PrimaryScope" minOccurs="0" maxOccurs="1"/>
                         
@@ -281,6 +411,20 @@
                 <xs:extension base="members:participantType">
                     <xs:sequence>
                         <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
+                        <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="DomainOwner">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:participantType">
+                    <xs:sequence>
+                        <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
+                        <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
@@ -296,7 +440,8 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="members:Member" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="members:NonMember" minOccurs="0" maxOccurs="unbounded"/>                    
+                <xs:element ref="members:NonMember" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="members:DomainOwner" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
