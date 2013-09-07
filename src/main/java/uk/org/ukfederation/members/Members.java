@@ -59,7 +59,7 @@ public class Members {
     /**
      * Set of all the owner names within the members document.
      */
-    private final Set<String> ownerNames = new HashSet<String>();
+    private final Set<String> ownerNames = new HashSet<>();
     
     /**
      * Collections of (non-regex) scopes pushed to each entity.
@@ -168,7 +168,7 @@ public class Members {
      */
     private void collectPushedScopes() {
         // initialise the map we store everything in
-        pushedScopes = new HashMap<String, List<String>>();
+        pushedScopes = new HashMap<>();
         
         // loop through each Member element
         for (MemberElement member : membersElement.getMember()) {
@@ -187,7 +187,7 @@ public class Members {
                     List<String> scopeList = pushedScopes.get(entityID);
                     if (scopeList == null) {
                         // first mention of this entity
-                        pushedScopes.put(entityID, new ArrayList<String>(scopes));
+                        pushedScopes.put(entityID, new ArrayList<>(scopes));
                     } else {
                         // entity has a list already, add in the new ones
                         scopeList.addAll(scopes);
