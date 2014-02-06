@@ -40,6 +40,31 @@
     <dependencies>
 
         <!-- Runtime dependencies -->
+        <dependency>
+            <groupId>${xerces.groupId}</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>${xerces.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${xerces.groupId}</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>${xerces.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${xerces.groupId}</groupId>
+            <artifactId>serializer</artifactId>
+             <version>${xerces.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${xmlresolver.groupId}</groupId>
+            <artifactId>xml-resolver</artifactId>
+            <version>${xmlresolver.version}</version>      
+        </dependency>
+        <dependency>
+            <groupId>${xalan.groupId}</groupId>
+            <artifactId>xalan</artifactId>
+            <version>${xalan.version}</version>
+        </dependency>
 
         <!-- Test dependencies -->
 
