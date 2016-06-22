@@ -15,6 +15,8 @@
     
     <name>UK federation members</name>
     <description>API to access the UK federation members.xml database.</description>
+    <url>https://github.com/ukf/ukf-members</url>
+    <inceptionYear>2011</inceptionYear>
 
     <properties>
         <checkstyle.configLocation>checkstyle.xml</checkstyle.configLocation>
@@ -175,5 +177,30 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <scm>
+        <connection>scm:git:https://github.com/ukf/ukf-members.git</connection>
+        <developerConnection>scm:git:ssh:git@github.com:ukf/ukf-members.git</developerConnection>
+        <url>https://github.com/ukf/ukf-members</url>
+    </scm>
+    
+    <developers>
+        <developer>
+            <id>iay</id>
+            <name>Ian Young</name>
+            <timezone>0</timezone>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <repository>
+            <id>ukf-release</id>
+            <url>https://apps.iay.org.uk/nexus/content/repositories/ukf</url>
+        </repository>
+        <snapshotRepository>
+            <id>ukf-snapshot</id>
+            <url>https://apps.iay.org.uk/nexus/content/repositories/ukf-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
