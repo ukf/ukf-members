@@ -52,7 +52,7 @@ public class MembersTest {
      * Acquire a stream for the named test resource.
      * 
      * @param resourceName name of the resource to acquire
-     * @return {@InputStream} to the resource
+     * @return {@link InputStream} to the resource
      */
     private InputStream streamResource(String resourceName) {
         return MembersTest.class.getResourceAsStream("/" + resourceName);
@@ -95,7 +95,7 @@ public class MembersTest {
     }
 
     /**
-     * Tests {@link Members.isOwnerName} with simple {@link String} parameters.
+     * Tests {@link Members#isOwnerName} with simple {@link String} parameters.
      * 
      * Also, inter alia, tests the stream constructor.
      */
@@ -136,7 +136,7 @@ public class MembersTest {
     }
 
     /**
-     * Tests the {@link isMemberName} predicate used from within XSLT.
+     * Tests the {@link Members#isOwnerName} predicate used from within XSLT.
      * 
      * @throws Exception if anything goes wrong.
      */
