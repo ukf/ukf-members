@@ -19,6 +19,7 @@ package uk.org.ukfederation.members;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,6 +33,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
+
+import uk.org.ukfederation.members.jaxb.MemberElement;
+import uk.org.ukfederation.members.jaxb.MembersElement;
 
 /**
  * Tests for the {@link Members} class.
@@ -171,4 +175,13 @@ public class MembersTest {
         Assert.assertTrue(diff.identical(), "diff comparison should have been identical: " + diff);
     }
 
+    @Test
+    public void getMembersElement() throws Exception {
+        final Members m = new Members(fetchDocument("oneOfEach.xml"));
+        final MembersElement members = m.getMembersElement();
+        Assert.assertNotNull(members);
+        final List<MemberElement> memberList = members.getMember();
+        Assert.assertNotNull(memberList);
+        Assert.assertEquals(memberList.size(), 1);
+    }
 }

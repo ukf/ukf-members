@@ -152,6 +152,15 @@ public class Members {
     }
 
     /**
+     * Returns the {@link MembersElement} object the bean is based on.
+     * 
+     * @return the {@link MembersElement} object
+     */
+    @Nonnull public MembersElement getMembersElement() {
+        return membersElement;
+    }
+
+    /**
      * Checks for a legitimate entity owner name: either the name of a federation member or the name of a known
      * non-member entity owner.
      * 
