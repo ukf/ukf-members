@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.xml.bind.JAXB;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -78,7 +79,7 @@ public class Members {
      * 
      * @param m The {@link MembersElement} on which to base the new bean.
      */
-    private Members(MembersElement m) {
+    private Members(@Nonnull final MembersElement m) {
         membersElement = m;
         
         /*
@@ -90,14 +91,14 @@ public class Members {
         /*
          * Collect names of members.
          */
-        for (MemberElement member : membersElement.getMember()) {
+        for (final MemberElement member : membersElement.getMember()) {
             ownerNames.add(member.getName());
         }
 
         /*
          * Collect names of non-members.
          */
-        for (NonMemberElement nonMember : membersElement.getNonMember()) {
+        for (final NonMemberElement nonMember : membersElement.getNonMember()) {
             ownerNames.add(nonMember.getName());
         }
     }
@@ -107,7 +108,7 @@ public class Members {
      * 
      * @param stream {@link InputStream} to parse.
      */
-    public Members(final InputStream stream) {
+    public Members(@Nonnull final InputStream stream) {
         this(JAXB.unmarshal(stream, MembersElement.class));
     }
 
@@ -116,7 +117,7 @@ public class Members {
      * 
      * @param doc {@link Document} node to base the {@link Members} object on
      */
-    public Members(final Node doc) {
+    public Members(@Nonnull final Node doc) {
         this(JAXB.unmarshal(makeDOMSource(doc), MembersElement.class));
     }
 
@@ -125,7 +126,7 @@ public class Members {
      * 
      * @param file File to be converted into a {@link Members} object.
      */
-    public Members(final File file) {
+    public Members(@Nonnull final File file) {
         this(JAXB.unmarshal(file, MembersElement.class));
     }
 
@@ -138,7 +139,7 @@ public class Members {
      * @param node DOM node to start from.
      * @return An appropriate {@link DOMSource}.
      */
-    private static DOMSource makeDOMSource(final Node node) {
+    private static DOMSource makeDOMSource(@Nonnull final Node node) {
         if (node == null) {
             throw new NullPointerException("provided DOM node is null");
         }
@@ -157,7 +158,7 @@ public class Members {
      * @param s Name to check.
      * @return {@code true} if and only if {@code s} contains a legitimate entity owner name.
      */
-    public boolean isOwnerName(final String s) {
+    public boolean isOwnerName(@Nonnull final String s) {
         return ownerNames.contains(s);
     }
     
@@ -171,20 +172,20 @@ public class Members {
         pushedScopes = new HashMap<>();
         
         // loop through each Member element
-        for (MemberElement member : membersElement.getMember()) {
+        for (final MemberElement member : membersElement.getMember()) {
             
             // each Member may have multiple Scopes elements
-            for (ScopesElement scopesElement: member.getScopes()) {
+            for (final ScopesElement scopesElement : member.getScopes()) {
                 
                 // each Scopes may have many Entity elements
-                List<String> entities = scopesElement.getEntity();
+                final List<String> entities = scopesElement.getEntity();
                 
                 // each Scopes may have many Scope elements
-                List<String> scopes = scopesElement.getScope();
+                final List<String> scopes = scopesElement.getScope();
                 
                 // Register each of those scopes for each of those entities
                 for (String entityID: entities) {
-                    List<String> scopeList = pushedScopes.get(entityID);
+                    final List<String> scopeList = pushedScopes.get(entityID);
                     if (scopeList == null) {
                         // first mention of this entity
                         pushedScopes.put(entityID, new ArrayList<>(scopes));
@@ -204,7 +205,7 @@ public class Members {
      * @return ordered list of scope elements to be added to the entity
      * @throws ParserConfigurationException if creating the result {@link Document} fails
      */
-    public NodeList scopesForEntity(final String entityID) throws ParserConfigurationException {
+    public NodeList scopesForEntity(@Nonnull final String entityID) throws ParserConfigurationException {
         
         // retrieve the pushed scopes if they have not already been retrieved
         if (pushedScopes == null) {
@@ -212,14 +213,14 @@ public class Members {
         }
         
         // acquire the list of scopes associated with this entityID, or null
-        List<String> scopes = pushedScopes.get(entityID);
+        final List<String> scopes = pushedScopes.get(entityID);
         
         // manufacture an appropriate DocumentFragment
-        Document doc = dbf.newDocumentBuilder().newDocument();
-        DocumentFragment frag = doc.createDocumentFragment();
+        final Document doc = dbf.newDocumentBuilder().newDocument();
+        final DocumentFragment frag = doc.createDocumentFragment();
         if (scopes != null) {
-            for (String scope: scopes) {
-                Element e = doc.createElementNS("urn:mace:shibboleth:metadata:1.0", "Scope");
+            for (final String scope : scopes) {
+                final Element e = doc.createElementNS("urn:mace:shibboleth:metadata:1.0", "Scope");
                 e.setAttribute("regex", "false");
                 e.setTextContent(scope);
                 frag.appendChild(e);
