@@ -6,3 +6,5 @@
 * Added a `doc` folder, a `README.md` and `LICENSE.txt`.
 * Added `<DomainOwner>` and `<Grant>` system to schema.
 * Take advantage of Java 7 type inference.
+* Remove support for use as a Xalan XSLT extension.
+
