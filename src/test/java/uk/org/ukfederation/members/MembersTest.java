@@ -138,24 +138,6 @@ public class MembersTest {
         Assert.assertTrue(m.isOwnerName("Valid Non Member"));
         Assert.assertFalse(m.isOwnerName("Should not be present"));
     }
-
-    /**
-     * Tests the {@link Members#isOwnerName} predicate used from within XSLT.
-     * 
-     * @throws Exception if anything goes wrong.
-     */
-    @Test
-    public void testIsOwnerNameXSLT() throws Exception {
-        Document in = fetchDocument("isMemberNameIn.xml");
-        Document tr = fetchDocument("isMemberName.xsl");
-        Document ok = fetchDocument("isMemberNameOK.xml");
-        Transformer t = tFactory.newTransformer(new DOMSource(tr));
-        DOMResult out = new DOMResult();
-        t.transform(new DOMSource(in), out);
-        Document ou = (Document) (out.getNode());
-        Diff diff = new Diff(ok, ou);
-        Assert.assertTrue(diff.identical(), "diff comparison should have been identical: " + diff);
-    }
     
     /**
      * Test scopes pushed from within the members document to entities.
