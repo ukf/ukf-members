@@ -27,15 +27,10 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.xml.bind.JAXB;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
@@ -68,11 +63,6 @@ public class Members {
      * This is initialised the first time it is needed.
      */
     private Map<String, List<String>> pushedScopes;
-
-    /**
-     * Local namespace-aware {@link DocumentBuilderFactory} for use in creating DOM results.
-     */
-    private final DocumentBuilderFactory dbf;
     
     /**
      * Internal constructor, called by all public constructors.
@@ -82,12 +72,6 @@ public class Members {
     private Members(@Nonnull final MembersElement m) {
         membersElement = m;
         
-        /*
-         * Initialise the local DocumentBuilder so that we can create DOM outputs.
-         */
-        dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-
         /*
          * Collect names of members.
          */
@@ -211,33 +195,16 @@ public class Members {
      * Computes the "pushed" scope list for the named entity.
      * 
      * @param entityID name of the entity
-     * @return ordered list of scope elements to be added to the entity
-     * @throws ParserConfigurationException if creating the result {@link Document} fails
+     * @return ordered list of scopes to be added to the entity, or <code>null</code>
      */
-    public NodeList scopesForEntity(@Nonnull final String entityID) throws ParserConfigurationException {
+    public List<String> scopesForEntity(@Nonnull final String entityID) {
         
         // retrieve the pushed scopes if they have not already been retrieved
         if (pushedScopes == null) {
             collectPushedScopes();
         }
         
-        // acquire the list of scopes associated with this entityID, or null
-        final List<String> scopes = pushedScopes.get(entityID);
-        
-        // manufacture an appropriate DocumentFragment
-        final Document doc = dbf.newDocumentBuilder().newDocument();
-        final DocumentFragment frag = doc.createDocumentFragment();
-        if (scopes != null) {
-            for (final String scope : scopes) {
-                final Element e = doc.createElementNS("urn:mace:shibboleth:metadata:1.0", "Scope");
-                e.setAttribute("regex", "false");
-                e.setTextContent(scope);
-                frag.appendChild(e);
-            }
-        }
-        
-        // return the collected nodes as a NodeList
-        return frag.getChildNodes();
+        return pushedScopes.get(entityID);
     }
 
 }

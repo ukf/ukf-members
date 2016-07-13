@@ -7,4 +7,6 @@
 * Added `<DomainOwner>` and `<Grant>` system to schema.
 * Take advantage of Java 7 type inference.
 * Remove support for use as a Xalan XSLT extension.
+* Add access to the JAXB tree from the main bean.
+* Change pushed scopes API from DOM to a list of Strings.
 

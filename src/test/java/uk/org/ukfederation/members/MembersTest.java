@@ -23,12 +23,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
 
-import org.custommonkey.xmlunit.Diff;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -48,9 +43,6 @@ public class MembersTest {
 
     /** Document builder factory used by every test. */
     private DocumentBuilderFactory dbFactory;
-
-    /** Transformer factory used by many tests. */
-    private TransformerFactory tFactory;
 
     /**
      * Acquire a stream for the named test resource.
@@ -95,7 +87,6 @@ public class MembersTest {
         dbFactory = DocumentBuilderFactory.newInstance();
         dbFactory.setNamespaceAware(true);
         dbFactory.setFeature("http://apache.org/xml/features/dom/defer-node-expansion", false);
-        tFactory = TransformerFactory.newInstance();
     }
 
     /**
@@ -146,15 +137,23 @@ public class MembersTest {
      */
     @Test
     public void testPushedScopes() throws Exception {
-        Document in = fetchDocument("pushedScopesIn.xml");
-        Document tr = fetchDocument("pushedScopes.xsl");
-        Document ok = fetchDocument("pushedScopesOK.xml");
-        Transformer t = tFactory.newTransformer(new DOMSource(tr));
-        DOMResult out = new DOMResult();
-        t.transform(new DOMSource(in), out);
-        Document ou = (Document) (out.getNode());
-        Diff diff = new Diff(ok, ou);
-        Assert.assertTrue(diff.identical(), "diff comparison should have been identical: " + diff);
+        final Members m = new Members(fetchDocument("pushedScopes.xml"));
+        final List<String> e0 = m.scopesForEntity("entity0");
+        Assert.assertNull(e0);
+
+        final List<String> e1 = m.scopesForEntity("entity1");
+        Assert.assertEquals(e1.size(), 4);
+        Assert.assertTrue(e1.contains("iay.org.uk"));
+        Assert.assertTrue(e1.contains("example.com"));
+        Assert.assertTrue(e1.contains("ed.ac.uk"));
+        Assert.assertTrue(e1.contains("sub.ed.ac.uk"));
+        Assert.assertFalse(e1.contains("no"));
+        
+        final List<String> e2 = m.scopesForEntity("entity2");
+        Assert.assertEquals(e2.size(), 2);
+        Assert.assertTrue(e2.contains("example.com"));
+        Assert.assertTrue(e2.contains("ed.ac.uk"));
+        Assert.assertFalse(e2.contains("no"));
     }
 
     @Test
