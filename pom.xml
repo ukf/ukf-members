@@ -12,15 +12,12 @@
     <groupId>uk.org.ukfederation</groupId>
     <artifactId>ukf-members</artifactId>
     <version>1.2.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     
-    <name>UK federation members</name>
+    <name>UK federation members API</name>
     <description>API to access the UK federation members.xml database.</description>
     <url>https://github.com/ukf/ukf-members</url>
     <inceptionYear>2011</inceptionYear>
-
-    <properties>
-        <checkstyle.configLocation>checkstyle.xml</checkstyle.configLocation>
-    </properties>
 
     <repositories>
         <repository>
@@ -109,6 +106,7 @@
         <developer>
             <id>iay</id>
             <name>Ian Young</name>
+            <organizationUrl>http://iay.org.uk/</organizationUrl>
             <timezone>0</timezone>
         </developer>
     </developers>
