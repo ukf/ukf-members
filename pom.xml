@@ -20,12 +20,6 @@
 
     <properties>
         <checkstyle.configLocation>checkstyle.xml</checkstyle.configLocation>
-        <xalan.groupId>xalan</xalan.groupId>
-        <xalan.version>2.7.1</xalan.version>
-        <xerces.groupId>org.apache.xerces</xerces.groupId>
-        <xerces.version>2.11.0</xerces.version>
-        <xmlresolver.groupId>xml-resolver</xmlresolver.groupId>
-        <xmlresolver.version>1.2</xmlresolver.version>
     </properties>
 
     <repositories>
@@ -55,36 +49,6 @@
         </dependency>
 
         <!-- Runtime dependencies -->
-        <dependency>
-            <groupId>${xerces.groupId}</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>${xerces.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${xerces.groupId}</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>${xerces.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${xerces.groupId}</groupId>
-            <artifactId>serializer</artifactId>
-             <version>${xerces.version}</version>
-             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${xmlresolver.groupId}</groupId>
-            <artifactId>xml-resolver</artifactId>
-            <version>${xmlresolver.version}</version>      
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${xalan.groupId}</groupId>
-            <artifactId>xalan</artifactId>
-            <version>${xalan.version}</version>
-            <scope>runtime</scope>
-        </dependency>
 
         <!-- Test dependencies -->
 
@@ -112,82 +76,8 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/endorsed</outputDirectory>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${xerces.groupId}</groupId>
-                                    <artifactId>xml-apis</artifactId>
-                                    <version>${xerces.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>${xerces.groupId}</groupId>
-                                    <artifactId>xercesImpl</artifactId>
-                                    <version>${xerces.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>${xerces.groupId}</groupId>
-                                    <artifactId>serializer</artifactId>
-                                    <version>${xerces.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>${xmlresolver.groupId}</groupId>
-                                    <artifactId>xml-resolver</artifactId>
-                                    <version>${xmlresolver.version}</version>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>${xalan.groupId}</groupId>
-                                    <artifactId>xalan</artifactId>
-                                    <version>${xalan.version}</version>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-
-                </executions>
-            </plugin>
-
         </plugins>
 
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
-                    build itself. -->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-dependency-plugin</artifactId>
-                                        <versionRange>[2.1,)</versionRange>
-                                        <goals>
-                                            <goal>copy</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <scm>
