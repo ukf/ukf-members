@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.5">
+    version="1.6">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -374,7 +374,7 @@
             
         </xs:sequence>
         
-        <xs:attribute name="ID" use="optional" type="members:orgIDType"/>
+        <xs:attribute name="ID" use="required" type="members:orgIDType"/>
 
     </xs:complexType>
 
@@ -409,19 +409,6 @@
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="NonMember">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="members:participantType">
-                    <xs:sequence>
-                        <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
-                        <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-    
     <xs:element name="DomainOwner">
         <xs:complexType>
             <xs:complexContent>
@@ -444,7 +431,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="members:Member" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="members:NonMember" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="members:DomainOwner" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>

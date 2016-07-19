@@ -34,7 +34,6 @@ import org.w3c.dom.Node;
 
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
-import uk.org.ukfederation.members.jaxb.NonMemberElement;
 import uk.org.ukfederation.members.jaxb.ScopesElement;
 
 /**
@@ -77,13 +76,6 @@ public class Members {
          */
         for (final MemberElement member : membersElement.getMember()) {
             ownerNames.add(member.getName());
-        }
-
-        /*
-         * Collect names of non-members.
-         */
-        for (final NonMemberElement nonMember : membersElement.getNonMember()) {
-            ownerNames.add(nonMember.getName());
         }
     }
 

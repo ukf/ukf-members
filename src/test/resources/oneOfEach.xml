@@ -7,7 +7,4 @@
         <Name>Valid Member</Name>
         <JoinDate>2008-04-29</JoinDate>
     </Member>
-    <NonMember>
-        <Name>Valid Non Member</Name>
-    </NonMember>
 </Members>

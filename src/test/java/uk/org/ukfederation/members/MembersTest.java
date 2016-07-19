@@ -98,7 +98,6 @@ public class MembersTest {
     public void testIsOwnerNameString() {
         Members m = fetchMembers("oneOfEach.xml");
         Assert.assertTrue(m.isOwnerName("Valid Member"));
-        Assert.assertTrue(m.isOwnerName("Valid Non Member"));
         Assert.assertFalse(m.isOwnerName("Should not be present"));
     }
 
@@ -111,7 +110,6 @@ public class MembersTest {
     public void testConstructorDocument() throws Exception {
         Members m = new Members(fetchDocument("oneOfEach.xml"));
         Assert.assertTrue(m.isOwnerName("Valid Member"));
-        Assert.assertTrue(m.isOwnerName("Valid Non Member"));
         Assert.assertFalse(m.isOwnerName("Should not be present"));
     }
 
@@ -126,7 +124,6 @@ public class MembersTest {
         File f = new File(u.toURI());
         Members m = new Members(f);
         Assert.assertTrue(m.isOwnerName("Valid Member"));
-        Assert.assertTrue(m.isOwnerName("Valid Non Member"));
         Assert.assertFalse(m.isOwnerName("Should not be present"));
     }
     
