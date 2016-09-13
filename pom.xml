@@ -19,6 +19,10 @@
     <url>https://github.com/ukf/ukf-members</url>
     <inceptionYear>2011</inceptionYear>
 
+    <properties>
+        <java-support.version>7.2.0</java-support.version>
+    </properties>
+
     <repositories>
         <repository>
             <id>shib-release</id>
@@ -43,6 +47,11 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.shibboleth.utilities</groupId>
+            <artifactId>java-support</artifactId>
+            <version>${java-support.version}</version>
         </dependency>
 
         <!-- Runtime dependencies -->

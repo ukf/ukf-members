@@ -7,8 +7,8 @@
         <Name>Valid Member</Name>
         <JoinDate>2008-04-29</JoinDate>
     </Member>
-    <DomainOwner>
-        <Name>Domain Owner</Name>
-        <JoinDate>2008-04-29</JoinDate>
-    </DomainOwner>
+    <Member>
+        <Name>Valid Member</Name>
+        <JoinDate>2010-12-29</JoinDate>
+    </Member>
 </Members>

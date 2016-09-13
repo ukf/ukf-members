@@ -29,6 +29,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
 
@@ -59,8 +60,9 @@ public class MembersTest {
      * 
      * @param resourceName name of the resource
      * @return {@link Members} object corresponding to the resource.
+     * @throws ComponentInitializationException if there is a problem in the members document
      */
-    private Members fetchMembers(String resourceName) {
+    private Members fetchMembers(String resourceName) throws ComponentInitializationException {
         return new Members(streamResource(resourceName));
     }
 
@@ -95,10 +97,11 @@ public class MembersTest {
      * Also, inter alia, tests the stream constructor.
      */
     @Test
-    public void testIsOwnerNameString() {
+    public void testIsOwnerNameString() throws Exception {
         Members m = fetchMembers("oneOfEach.xml");
         Assert.assertTrue(m.isOwnerName("Valid Member"));
         Assert.assertFalse(m.isOwnerName("Should not be present"));
+        Assert.assertFalse(m.isOwnerName("Domain Owner"));
     }
 
     /**
@@ -161,5 +164,27 @@ public class MembersTest {
         final List<MemberElement> memberList = members.getMember();
         Assert.assertNotNull(memberList);
         Assert.assertEquals(memberList.size(), 1);
+    }
+
+    @Test
+    public void testDuplicateMemberName() throws Exception {
+        try {
+            new Members(fetchDocument("duplicateMember.xml"));
+        } catch (ComponentInitializationException e) {
+            // expected
+            return;
+        }
+        Assert.fail("expected component initialization exception");
+    }
+
+    @Test
+    public void testDuplicateParticipantName() throws Exception {
+        try {
+            new Members(fetchDocument("duplicateParticipant.xml"));
+        } catch (ComponentInitializationException e) {
+            // expected
+            return;
+        }
+        Assert.fail("expected component initialization exception");
     }
 }

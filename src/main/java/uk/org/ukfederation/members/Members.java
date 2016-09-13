@@ -20,10 +20,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.xml.bind.JAXB;
@@ -32,8 +30,11 @@ import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import uk.org.ukfederation.members.jaxb.DomainOwnerElement;
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
+import uk.org.ukfederation.members.jaxb.ParticipantType;
 import uk.org.ukfederation.members.jaxb.ScopesElement;
 
 /**
@@ -52,9 +53,9 @@ public class Members {
     private final MembersElement membersElement;
 
     /**
-     * Set of all the owner names within the members document.
+     * Map of participants indexed by name.
      */
-    private final Set<String> ownerNames = new HashSet<>();
+    private final Map<String, ParticipantType> participantByName = new HashMap<>();
     
     /**
      * Collections of (non-regex) scopes pushed to each entity.
@@ -67,15 +68,19 @@ public class Members {
      * Internal constructor, called by all public constructors.
      * 
      * @param m The {@link MembersElement} on which to base the new bean.
+     * @throws ComponentInitializationException if there is a problem in the members document
      */
-    private Members(@Nonnull final MembersElement m) {
+    private Members(@Nonnull final MembersElement m) throws ComponentInitializationException {
         membersElement = m;
         
-        /*
-         * Collect names of members.
-         */
+        // Index members.
         for (final MemberElement member : membersElement.getMember()) {
-            ownerNames.add(member.getName());
+            addParticipant(member);
+        }
+        
+        // Index domain owners.
+        for (final DomainOwnerElement domainOwner : membersElement.getDomainOwner()) {
+            addParticipant(domainOwner);
         }
     }
 
@@ -83,8 +88,9 @@ public class Members {
      * Constructs a {@link Members} object from an XML document represented as a stream.
      * 
      * @param stream {@link InputStream} to parse.
+     * @throws ComponentInitializationException if there is a problem in the members document
      */
-    public Members(@Nonnull final InputStream stream) {
+    public Members(@Nonnull final InputStream stream) throws ComponentInitializationException {
         this(JAXB.unmarshal(stream, MembersElement.class));
     }
 
@@ -92,8 +98,9 @@ public class Members {
      * Constructs a {@link Members} object from an XML document represented as a DOM {@link Node} object.
      * 
      * @param doc {@link Document} node to base the {@link Members} object on
+     * @throws ComponentInitializationException if there is a problem in the members document
      */
-    public Members(@Nonnull final Node doc) {
+    public Members(@Nonnull final Node doc) throws ComponentInitializationException {
         this(JAXB.unmarshal(makeDOMSource(doc), MembersElement.class));
     }
 
@@ -101,8 +108,9 @@ public class Members {
      * Constructs a {@link Members} object from an XML document referred to as a {@link File}.
      * 
      * @param file File to be converted into a {@link Members} object.
+     * @throws ComponentInitializationException if there is a problem in the members document
      */
-    public Members(@Nonnull final File file) {
+    public Members(@Nonnull final File file) throws ComponentInitializationException {
         this(JAXB.unmarshal(file, MembersElement.class));
     }
 
@@ -128,6 +136,21 @@ public class Members {
     }
 
     /**
+     * Registers a participant (a member or domain owner) from the members document.
+     * 
+     * @param participant the participant to register
+     * @throws ComponentInitializationException if the participant is malformed
+     */
+    private void addParticipant(@Nonnull final ParticipantType participant) throws ComponentInitializationException {
+        final String name = participant.getName();
+        if (participantByName.containsKey(name)) {
+            throw new ComponentInitializationException("duplicate participant name in members document: " + name);
+        } else {
+            participantByName.put(name, participant);
+        }
+    }
+
+    /**
      * Returns the {@link MembersElement} object the bean is based on.
      * 
      * @return the {@link MembersElement} object
@@ -137,14 +160,13 @@ public class Members {
     }
 
     /**
-     * Checks for a legitimate entity owner name: either the name of a federation member or the name of a known
-     * non-member entity owner.
+     * Checks for the name of a federation member.
      * 
      * @param s Name to check.
      * @return {@code true} if and only if {@code s} contains a legitimate entity owner name.
      */
     public boolean isOwnerName(@Nonnull final String s) {
-        return ownerNames.contains(s);
+        return participantByName.get(s) instanceof MemberElement;
     }
     
     /**
