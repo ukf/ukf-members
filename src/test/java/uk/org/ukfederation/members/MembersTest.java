@@ -19,6 +19,7 @@ package uk.org.ukfederation.members;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.xml.bind.UnmarshalException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -26,6 +27,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXParseException;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import uk.org.ukfederation.members.jaxb.MemberElement;
@@ -172,5 +174,17 @@ public class MembersTest {
             return;
         }
         Assert.fail("expected component initialization exception");
+    }
+
+    @Test
+    public void testDuplicateOrgID() throws Exception {
+        try {
+            new Members(fetchDocument("duplicateOrg.xml"));
+        } catch (UnmarshalException e) {
+            // expected
+            Assert.assertTrue(e.getLinkedException() instanceof SAXParseException);
+            return;
+        }
+        Assert.fail("expected parsing exception");
     }
 }
