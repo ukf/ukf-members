@@ -16,7 +16,6 @@
 
 package uk.org.ukfederation.members;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,19 +88,6 @@ public class Members {
         for (final DomainOwnerElement domainOwner : membersElement.getDomainOwner()) {
             addParticipant(domainOwner);
         }
-    }
-
-    /**
-     * Constructs a {@link Members} object from an XML document represented as a stream.
-     * 
-     * @param stream {@link InputStream} to parse.
-     * @throws ComponentInitializationException if there is a problem in the members document
-     * @throws JAXBException if there is a problem unmarshalling the members document
-     * @throws SAXException if there is a problem parsing the schema document
-     */
-    public Members(@Nonnull final InputStream stream)
-            throws ComponentInitializationException, JAXBException, SAXException {
-        this(makeUnmarshaller().unmarshal(new StreamSource(stream), MembersElement.class).getValue());
     }
 
     /**

@@ -61,7 +61,7 @@ public class MembersTest {
      * @throws ComponentInitializationException if there is a problem in the members document
      */
     private Members fetchMembers(String resourceName) throws Exception {
-        return new Members(streamResource(resourceName));
+        return new Members(fetchDocument(resourceName));
     }
 
     /**
