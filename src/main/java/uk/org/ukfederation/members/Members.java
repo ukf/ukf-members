@@ -33,7 +33,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
@@ -71,14 +70,17 @@ public class Members {
     private Map<String, List<String>> pushedScopes;
     
     /**
-     * Internal constructor, called by all public constructors.
+     * Constructs a {@link Members} object from an XML document.
      * 
-     * @param m The {@link MembersElement} on which to base the new bean.
+     * @param doc {@link Document} node to base the {@link Members} object on
      * @throws ComponentInitializationException if there is a problem in the members document
+     * @throws JAXBException if there is a problem unmarshalling the members document
+     * @throws SAXException if there is a problem parsing the schema document
      */
-    private Members(@Nonnull final MembersElement m) throws ComponentInitializationException {
-        membersElement = m;
-        
+    public Members(@Nonnull final Document doc) throws ComponentInitializationException, JAXBException, SAXException {
+        final DOMSource source = new DOMSource(doc.getDocumentElement(), "members.xml");
+        membersElement = makeUnmarshaller().unmarshal(source, MembersElement.class).getValue();
+
         // Index members.
         for (final MemberElement member : membersElement.getMember()) {
             addParticipant(member);
@@ -88,18 +90,6 @@ public class Members {
         for (final DomainOwnerElement domainOwner : membersElement.getDomainOwner()) {
             addParticipant(domainOwner);
         }
-    }
-
-    /**
-     * Constructs a {@link Members} object from an XML document represented as a DOM {@link Node} object.
-     * 
-     * @param doc {@link Document} node to base the {@link Members} object on
-     * @throws ComponentInitializationException if there is a problem in the members document
-     * @throws JAXBException if there is a problem unmarshalling the members document
-     * @throws SAXException if there is a problem parsing the schema document
-     */
-    public Members(@Nonnull final Node doc) throws ComponentInitializationException, JAXBException, SAXException {
-        this(makeUnmarshaller().unmarshal(makeDOMSource(doc), MembersElement.class).getValue());
     }
 
     /**
@@ -119,27 +109,6 @@ public class Members {
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         unmarshaller.setSchema(schema);
         return unmarshaller;
-    }
-
-    /**
-     * Helper method for constructors.
-     * 
-     * Returns a {@link DOMSource} derived from the provided DOM {@link Node}. If the node is a {@link Document}, dig
-     * down to its document element. This sometimes helps JAXB when called from within Xalan.
-     * 
-     * @param node DOM node to start from.
-     * @return An appropriate {@link DOMSource}.
-     */
-    private static DOMSource makeDOMSource(@Nonnull final Node node) {
-        if (node == null) {
-            throw new NullPointerException("provided DOM node is null");
-        }
-
-        if (node instanceof Document) {
-            Document d = (Document) node;
-            return new DOMSource(d.getDocumentElement());
-        }
-        return new DOMSource(node);
     }
 
     /**
