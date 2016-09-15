@@ -156,6 +156,7 @@ public class MembersTest {
             new Members(fetchDocument("duplicateMember.xml"));
         } catch (ComponentInitializationException e) {
             // expected
+            Assert.assertTrue(e.getMessage().contains("duplicate participant name"));
             return;
         }
         Assert.fail("expected component initialization exception");
@@ -167,6 +168,7 @@ public class MembersTest {
             new Members(fetchDocument("duplicateParticipant.xml"));
         } catch (ComponentInitializationException e) {
             // expected
+            Assert.assertTrue(e.getMessage().contains("duplicate participant name"));
             return;
         }
         Assert.fail("expected component initialization exception");
