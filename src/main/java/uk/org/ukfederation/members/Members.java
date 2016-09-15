@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -136,13 +137,38 @@ public class Members {
     }
 
     /**
+     * Returns the JAXB object for the named participant.
+     * 
+     * @param name name of participant to look up
+     * @return {@link ParticipantType} for the participant, or <code>null</code>
+     */
+    @Nullable
+    public ParticipantType getParticipantByName(@Nonnull final String name) {
+        return participantByName.get(name);
+    }
+
+    /**
+     * Returns the JAXB object for the named member.
+     * 
+     * Note: looking up a non-member participant will return <code>null</code>.
+     * 
+     * @param name name of member to look up
+     * @return {@link MemberElement} for the member, or <code>null</code>
+     */
+    @Nullable
+    public MemberElement getMemberByName(@Nonnull final String name) {
+        final ParticipantType participant = getParticipantByName(name);
+        return (participant instanceof MemberElement) ? (MemberElement)participant : null;
+    }
+
+    /**
      * Checks for the name of a federation member.
      * 
-     * @param s Name to check.
-     * @return {@code true} if and only if {@code s} contains a legitimate entity owner name.
+     * @param name Name to check.
+     * @return {@code true} if and only if {@code name} contains a legitimate entity owner name.
      */
-    public boolean isOwnerName(@Nonnull final String s) {
-        return participantByName.get(s) instanceof MemberElement;
+    public boolean isOwnerName(@Nonnull final String name) {
+        return getMemberByName(name) != null;
     }
     
     /**

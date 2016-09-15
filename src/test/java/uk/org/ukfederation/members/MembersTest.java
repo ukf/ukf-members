@@ -30,8 +30,10 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import uk.org.ukfederation.members.jaxb.DomainOwnerElement;
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
+import uk.org.ukfederation.members.jaxb.ParticipantType;
 
 /**
  * Tests for the {@link Members} class.
@@ -186,5 +188,41 @@ public class MembersTest {
             return;
         }
         Assert.fail("expected parsing exception");
+    }
+
+    @Test
+    public void getParticipantByName() throws Exception {
+        final Members m = new Members(fetchDocument("oneOfEach.xml"));
+        
+        final ParticipantType p1 = m.getParticipantByName("not present");
+        Assert.assertNull(p1);
+        
+        final ParticipantType p2 = m.getParticipantByName("Valid Member");
+        Assert.assertNotNull(p2);
+        Assert.assertTrue(p2 instanceof MemberElement);
+        Assert.assertEquals(p2.getName(), "Valid Member");
+        Assert.assertEquals(p2.getID(), "ukforg12345");
+
+        final ParticipantType p3 = m.getParticipantByName("Domain Owner");
+        Assert.assertNotNull(p3);
+        Assert.assertTrue(p3 instanceof DomainOwnerElement);
+        Assert.assertEquals(p3.getName(), "Domain Owner");
+        Assert.assertEquals(p3.getID(), "ukforg1234");
+    }
+
+    @Test
+    public void getMemberByName() throws Exception {
+        final Members m = new Members(fetchDocument("oneOfEach.xml"));
+        
+        final MemberElement m1 = m.getMemberByName("not present");
+        Assert.assertNull(m1);
+
+        final MemberElement m2 = m.getMemberByName("Valid Member");
+        Assert.assertNotNull(m2);
+        Assert.assertEquals(m2.getName(), "Valid Member");
+        Assert.assertEquals(m2.getID(), "ukforg12345");
+
+        final MemberElement m3 = m.getMemberByName("Domain Owner");
+        Assert.assertNull(m3);
     }
 }
