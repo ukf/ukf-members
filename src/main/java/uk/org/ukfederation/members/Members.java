@@ -16,7 +16,6 @@
 
 package uk.org.ukfederation.members;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -115,18 +114,6 @@ public class Members {
      */
     public Members(@Nonnull final Node doc) throws ComponentInitializationException, JAXBException, SAXException {
         this(makeUnmarshaller().unmarshal(makeDOMSource(doc), MembersElement.class).getValue());
-    }
-
-    /**
-     * Constructs a {@link Members} object from an XML document referred to as a {@link File}.
-     * 
-     * @param file File to be converted into a {@link Members} object.
-     * @throws ComponentInitializationException if there is a problem in the members document
-     * @throws JAXBException if there is a problem unmarshalling the members document
-     * @throws SAXException if there is a problem parsing the schema document
-     */
-    public Members(@Nonnull final File file) throws ComponentInitializationException, JAXBException, SAXException {
-        this((MembersElement)makeUnmarshaller().unmarshal(file));
     }
 
     /**

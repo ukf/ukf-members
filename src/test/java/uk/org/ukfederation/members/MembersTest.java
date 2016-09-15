@@ -16,9 +16,7 @@
 
 package uk.org.ukfederation.members;
 
-import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -116,20 +114,6 @@ public class MembersTest {
         Assert.assertFalse(m.isOwnerName("Should not be present"));
     }
 
-    /**
-     * Tests the {@link File} constructor.
-     * 
-     * @throws Exception is anything goes wrong
-     */
-    @Test
-    public void testConstructorFile() throws Exception {
-        URL u = MembersTest.class.getResource("/oneOfEach.xml");
-        File f = new File(u.toURI());
-        Members m = new Members(f);
-        Assert.assertTrue(m.isOwnerName("Valid Member"));
-        Assert.assertFalse(m.isOwnerName("Should not be present"));
-    }
-    
     /**
      * Test scopes pushed from within the members document to entities.
      * 
