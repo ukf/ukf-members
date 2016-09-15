@@ -3,11 +3,11 @@
     xmlns="http://ukfederation.org.uk/2007/01/members"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://ukfederation.org.uk/2007/01/members ukfederation-members.xsd">
-    <Member>
+    <Member ID="ukforg12345">
         <Name>Valid Member</Name>
         <JoinDate>2008-04-29</JoinDate>
     </Member>
-    <Member>
+    <Member ID="ukforg12346">
         <Name>Valid Member</Name>
         <JoinDate>2010-12-29</JoinDate>
     </Member>

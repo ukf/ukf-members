@@ -62,7 +62,7 @@ public class MembersTest {
      * @return {@link Members} object corresponding to the resource.
      * @throws ComponentInitializationException if there is a problem in the members document
      */
-    private Members fetchMembers(String resourceName) throws ComponentInitializationException {
+    private Members fetchMembers(String resourceName) throws Exception {
         return new Members(streamResource(resourceName));
     }
 

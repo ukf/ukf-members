@@ -3,7 +3,7 @@
     xmlns="http://ukfederation.org.uk/2007/01/members"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://ukfederation.org.uk/2007/01/members ukfederation-members.xsd">
-    <Member>
+    <Member ID="ukforg12345">
         <Name>member1</Name>
         <JoinDate>2008-04-29</JoinDate>
         <Scopes>
@@ -11,7 +11,7 @@
             <Scope>iay.org.uk</Scope>
         </Scopes>
     </Member>
-    <Member>
+    <Member ID="ukforg123">
         <Name>member2</Name>
         <JoinDate>2011-01-01</JoinDate>
         <Scopes>

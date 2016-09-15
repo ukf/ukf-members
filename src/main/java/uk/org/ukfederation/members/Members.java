@@ -24,11 +24,19 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.xml.bind.JAXB;
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import uk.org.ukfederation.members.jaxb.DomainOwnerElement;
@@ -89,9 +97,12 @@ public class Members {
      * 
      * @param stream {@link InputStream} to parse.
      * @throws ComponentInitializationException if there is a problem in the members document
+     * @throws JAXBException if there is a problem unmarshalling the members document
+     * @throws SAXException if there is a problem parsing the schema document
      */
-    public Members(@Nonnull final InputStream stream) throws ComponentInitializationException {
-        this(JAXB.unmarshal(stream, MembersElement.class));
+    public Members(@Nonnull final InputStream stream)
+            throws ComponentInitializationException, JAXBException, SAXException {
+        this(makeUnmarshaller().unmarshal(new StreamSource(stream), MembersElement.class).getValue());
     }
 
     /**
@@ -99,9 +110,11 @@ public class Members {
      * 
      * @param doc {@link Document} node to base the {@link Members} object on
      * @throws ComponentInitializationException if there is a problem in the members document
+     * @throws JAXBException if there is a problem unmarshalling the members document
+     * @throws SAXException if there is a problem parsing the schema document
      */
-    public Members(@Nonnull final Node doc) throws ComponentInitializationException {
-        this(JAXB.unmarshal(makeDOMSource(doc), MembersElement.class));
+    public Members(@Nonnull final Node doc) throws ComponentInitializationException, JAXBException, SAXException {
+        this(makeUnmarshaller().unmarshal(makeDOMSource(doc), MembersElement.class).getValue());
     }
 
     /**
@@ -109,9 +122,30 @@ public class Members {
      * 
      * @param file File to be converted into a {@link Members} object.
      * @throws ComponentInitializationException if there is a problem in the members document
+     * @throws JAXBException if there is a problem unmarshalling the members document
+     * @throws SAXException if there is a problem parsing the schema document
      */
-    public Members(@Nonnull final File file) throws ComponentInitializationException {
-        this(JAXB.unmarshal(file, MembersElement.class));
+    public Members(@Nonnull final File file) throws ComponentInitializationException, JAXBException, SAXException {
+        this((MembersElement)makeUnmarshaller().unmarshal(file));
+    }
+
+    /**
+     * Make a schema-validating unmarshaller for MembersElement documents.
+     * 
+     * @return the constructed {@link Unmarshaller}
+     * @throws SAXException if there is a problem parsing the schema document
+     * @throws JAXBException if there is a problem constructing the unmarshaller
+     */
+    private static Unmarshaller makeUnmarshaller() throws SAXException, JAXBException {
+        final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
+        final Source schemaSource =
+                new StreamSource(Members.class.getClassLoader().getResourceAsStream("ukfederation-members.xsd"));
+        final Schema schema = sf.newSchema(schemaSource);
+        
+        final JAXBContext jc = JAXBContext.newInstance(MembersElement.class);
+        Unmarshaller unmarshaller = jc.createUnmarshaller();
+        unmarshaller.setSchema(schema);
+        return unmarshaller;
     }
 
     /**
