@@ -1,5 +1,15 @@
 # Release Notes for `ukf-members`
 
+## Version 1.3.0 ##
+
+* Schema updates:
+    * Participant ID is now required.
+    * Remove NonMember element.
+* Schema-validate members document.
+* Reduce to just one `Members` constructor taking `Document`.
+* Allow lookup of members or participants by name.
+* Detect duplicate participant names.
+
 ## Version 1.2.0 ##
 
 * Move to Shibboleth V3 parent POM and Java 7.
