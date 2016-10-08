@@ -4,6 +4,7 @@
 
 * Schema V1.7 updates:
 	* Add mandatory `orgID` attribute to `Grant` and `GrantAll`.
+* Add a second constructor for `Members` to allow small additions to the schema to be made without rebuilding `ukf-members`.
  
 ## Version 1.3.0 ##
 
