@@ -282,4 +282,13 @@ public class MembersTest {
         }
         Assert.fail("expected component initialization exception");
     }
+    
+    @Test
+    public void overrideSchema() throws Exception {
+        final Document schemaDocument = fetchDocument("overrideSchema.xsd");
+        final Document membersDocument = fetchDocument("overrideSchema.xml");
+        final Members members = new Members(membersDocument, schemaDocument);
+        final MembersElement membersElement = members.getMembersElement();
+        membersElement.getMember().get(0);
+    }
 }

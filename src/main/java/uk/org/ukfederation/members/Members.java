@@ -80,14 +80,17 @@ public class Members {
     /**
      * Constructs a {@link Members} object from an XML document.
      * 
-     * @param doc {@link Document} node to base the {@link Members} object on
+     * This constructor validates against the schema document passed as parameter.
+     * 
+     * @param document {@link Document} node to base the {@link Members} object on
+     * @param schema schema to validate against
      * @throws ComponentInitializationException if there is a problem in the members document
      * @throws JAXBException if there is a problem unmarshalling the members document
      * @throws SAXException if there is a problem parsing the schema document
      */
-    public Members(@Nonnull final Document doc) throws ComponentInitializationException, JAXBException, SAXException {
-        final DOMSource source = new DOMSource(doc.getDocumentElement(), "members.xml");
-        membersElement = makeUnmarshaller().unmarshal(source, MembersElement.class).getValue();
+    private Members(@Nonnull final Source document, @Nonnull final Source schema)
+            throws JAXBException, SAXException, ComponentInitializationException {
+        membersElement = makeUnmarshaller(schema).unmarshal(document, MembersElement.class).getValue();
 
         // Index members.
         for (final MemberElement member : membersElement.getMember()) {
@@ -115,16 +118,50 @@ public class Members {
     }
 
     /**
+     * Constructs a {@link Members} object from an XML document.
+     * 
+     * This constructor validates against the schema document passed as parameter.
+     * This allows a slightly extended schema to be used without rebuilding this
+     * project.
+     * 
+     * @param document {@link Document} node to base the {@link Members} object on
+     * @param schema schema to validate against
+     * @throws ComponentInitializationException if there is a problem in the members document
+     * @throws JAXBException if there is a problem unmarshalling the members document
+     * @throws SAXException if there is a problem parsing the schema document
+     */
+    public Members(@Nonnull final Document document, @Nonnull final Document schema)
+            throws JAXBException, SAXException, ComponentInitializationException {
+        this(new DOMSource(document.getDocumentElement(), "members.xml"),
+                new DOMSource(schema.getDocumentElement(), "ukfederation-members.xsd"));
+    }
+
+    /**
+     * Constructs a {@link Members} object from an XML document.
+     * 
+     * This constructor validates against the schema defined in this project.
+     * 
+     * @param doc {@link Document} node to base the {@link Members} object on
+     * @throws ComponentInitializationException if there is a problem in the members document
+     * @throws JAXBException if there is a problem unmarshalling the members document
+     * @throws SAXException if there is a problem parsing the schema document
+     */
+    public Members(@Nonnull final Document doc) throws ComponentInitializationException, JAXBException, SAXException {
+        this(new DOMSource(doc.getDocumentElement(), "members.xml"),
+                new StreamSource(Members.class.getClassLoader().getResourceAsStream("ukfederation-members.xsd")));
+    }
+
+    /**
      * Make a schema-validating unmarshaller for MembersElement documents.
      * 
+     * @param schemaSource schema to validate against
      * @return the constructed {@link Unmarshaller}
      * @throws SAXException if there is a problem parsing the schema document
      * @throws JAXBException if there is a problem constructing the unmarshaller
      */
-    private static Unmarshaller makeUnmarshaller() throws SAXException, JAXBException {
-        final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI); 
-        final Source schemaSource =
-                new StreamSource(Members.class.getClassLoader().getResourceAsStream("ukfederation-members.xsd"));
+    private static Unmarshaller makeUnmarshaller(@Nonnull final Source schemaSource)
+            throws SAXException, JAXBException {
+        final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         final Schema schema = sf.newSchema(schemaSource);
         
         final JAXBContext jc = JAXBContext.newInstance(MembersElement.class);

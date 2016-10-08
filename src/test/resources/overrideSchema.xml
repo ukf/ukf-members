@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Members
+    xmlns="http://ukfederation.org.uk/2007/01/members"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ukfederation.org.uk/2007/01/members ukfederation-members.xsd">
+    <Member ID="ukforg12345">
+        <Name>Valid Member</Name>
+        <JoinDate>2016-10-08</JoinDate>
+        <NewElement>new element text</NewElement>
+    </Member>
+</Members>
