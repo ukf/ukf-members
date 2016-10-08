@@ -225,4 +225,61 @@ public class MembersTest {
         final MemberElement m3 = m.getMemberByName("Domain Owner");
         Assert.assertNull(m3);
     }
+
+    @Test
+    public void testBadGrantTo() throws Exception {
+        try {
+            new Members(fetchDocument("badGrantTo.xml"));
+        } catch (final ComponentInitializationException e) {
+            // expected
+            Assert.assertTrue(e.getMessage().contains("unknown grant to="), "wrong message");
+            return;            
+        }
+        Assert.fail("expected component initialization exception");
+    }
+
+    @Test
+    public void testBadGrantToNonMember() throws Exception {
+        try {
+            new Members(fetchDocument("badGrantToNonMember.xml"));
+        } catch (final ComponentInitializationException e) {
+            // expected
+            Assert.assertTrue(e.getMessage().contains("not to a member"), "wrong message");
+            return;            
+        }
+        Assert.fail("expected component initialization exception");
+    }
+    
+    @Test
+    public void goodGrants() throws Exception {
+        final Members members = new Members(fetchDocument("goodGrants.xml"));
+        Assert.assertEquals(members.getMembersElement().getMember().size(), 2);
+        Assert.assertEquals(members.getMembersElement().getDomainOwner().size(), 1);
+        
+        final MemberElement m1 = members.getMembersElement().getMember().get(0);
+        final MemberElement m2 = members.getMembersElement().getMember().get(1);
+        final DomainOwnerElement d1 = members.getMembersElement().getDomainOwner().get(0);
+        
+        Assert.assertEquals(m1.getGrants().getGrantOrGrantAll().size(), 1);
+        Assert.assertSame(m1.getGrants().getGrantOrGrantAll().get(0).getOrgID(), m2);
+        
+        Assert.assertEquals(m2.getGrants().getGrantOrGrantAll().size(), 1);
+        Assert.assertSame(m2.getGrants().getGrantOrGrantAll().get(0).getOrgID(), m1);
+                
+        Assert.assertEquals(d1.getGrants().getGrantOrGrantAll().size(), 2);
+        Assert.assertSame(d1.getGrants().getGrantOrGrantAll().get(0).getOrgID(), m1);
+        Assert.assertSame(d1.getGrants().getGrantOrGrantAll().get(1).getOrgID(), m2);
+    }
+    
+    @Test
+    public void badGrantOrgID() throws Exception {
+        try {
+            new Members(fetchDocument("badGrantOrgID.xml"));
+        } catch (final ComponentInitializationException e) {
+            // expected
+            Assert.assertTrue(e.getMessage().contains("wrong participant"), "wrong message");
+            return;            
+        }
+        Assert.fail("expected component initialization exception");
+    }
 }

@@ -33,11 +33,15 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import uk.org.ukfederation.members.jaxb.BaseGrantType;
 import uk.org.ukfederation.members.jaxb.DomainOwnerElement;
+import uk.org.ukfederation.members.jaxb.GrantsElement;
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
 import uk.org.ukfederation.members.jaxb.ParticipantType;
@@ -52,6 +56,9 @@ import uk.org.ukfederation.members.jaxb.ScopesElement;
  * Author: Ian A. Young, ian@iay.org.uk
  */
 public class Members {
+
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(Members.class);
 
     /**
      * The root of the underlying JAXB object graph.
@@ -91,6 +98,20 @@ public class Members {
         for (final DomainOwnerElement domainOwner : membersElement.getDomainOwner()) {
             addParticipant(domainOwner);
         }
+        
+        /*
+         * Cross-check Grants elements.
+         * 
+         * This needs to be done after all participants have been registered so that we can
+         * see which participant each Grant is made to. However, each grant must by definition
+         * be made to an entity owner, and those must all be members.
+         */
+        for (final MemberElement member : membersElement.getMember()) {
+            checkGrants(member.getGrants(), member.getName());
+        }
+        for (final DomainOwnerElement domainOwner : membersElement.getDomainOwner()) {
+            checkGrants(domainOwner.getGrants(), domainOwner.getName());
+        }
     }
 
     /**
@@ -124,6 +145,56 @@ public class Members {
             throw new ComponentInitializationException("duplicate participant name in members document: " + name);
         } else {
             participantByName.put(name, participant);
+        }
+    }
+
+    /**
+     * Check that a series of grants are valid.
+     * 
+     * @param grants the {@link GrantsElement} to check
+     * @param name name of the granting participant
+     * @throws ComponentInitializationException if a grant is not valid
+     */
+    private void checkGrants(@Nullable final GrantsElement grants, @Nonnull final String name)
+            throws ComponentInitializationException {
+        if (grants == null) {
+            return;
+        }
+        
+        for (final BaseGrantType grant : grants.getGrantOrGrantAll()) {
+            // Grant must be to a participant we can look up by name
+            final ParticipantType to = participantByName.get(grant.getTo());
+            if (to == null) {
+                final String message = "unknown grant to=\"" + grant.getTo()
+                        + "\" in participant \"" + name + "\"";
+                log.error(message);
+                throw new ComponentInitializationException(message);
+            }
+            
+            // That participant must be a member
+            if (!(to instanceof MemberElement)) {
+                final String message = "grant to=\"" + grant.getTo()
+                        + "\" in participant \"" + name + "\" is not to a member";
+                log.error(message);
+                throw new ComponentInitializationException(message);
+            }
+            
+            // Make sure that "orgID" and "to" attributes are consistent.
+            final Object orgIDObject = grant.getOrgID();
+            if (orgIDObject != to) {
+                final String target;
+                if (orgIDObject instanceof ParticipantType) {
+                    target = "wrong participant \"" + ((ParticipantType)orgIDObject).getName() + "\"";
+                } else if (orgIDObject == null) {
+                    target = "null";
+                } else {
+                    target = "unknown " + orgIDObject.getClass().getName() + " object";
+                }
+                final String message = "grant to=\"" + grant.getTo()
+                    + "\" in participant \"" + name + " has bad orgID: " + target;
+                log.error(message);
+                throw new ComponentInitializationException(message);
+            }
         }
     }
 

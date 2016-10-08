@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Members
+    xmlns="http://ukfederation.org.uk/2007/01/members"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ukfederation.org.uk/2007/01/members ukfederation-members.xsd">
+    <Member ID="ukforg12345">
+        <Name>Valid Member</Name>
+        <JoinDate>2008-04-29</JoinDate>
+        <Grants>
+            <GrantAll to="Second Member" orgID="ukforg123">example.org</GrantAll>
+        </Grants>
+    </Member>
+    <Member ID="ukforg123">
+        <Name>Second Member</Name>
+        <JoinDate>2016-10-06</JoinDate>
+        <Grants>
+            <Grant to="Valid Member" orgID="ukforg12345" entityID="http://example.com">example.com</Grant>
+        </Grants>
+    </Member>
+    <DomainOwner ID="ukforg1234">
+        <Name>Domain Owner</Name>
+        <Grants>
+            <Grant to="Valid Member" orgID="ukforg12345" entityID="http://example.edu">example.edu</Grant>
+            <GrantAll to="Second Member" orgID="ukforg123">example.edu</GrantAll>
+        </Grants>
+    </DomainOwner>
+</Members>

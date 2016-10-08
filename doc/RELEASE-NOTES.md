@@ -1,5 +1,10 @@
 # Release Notes for `ukf-members`
 
+## Version 1.4.0 ##
+
+* Schema V1.7 updates:
+	* Add mandatory `orgID` attribute to `Grant` and `GrantAll`.
+ 
 ## Version 1.3.0 ##
 
 * Schema updates:

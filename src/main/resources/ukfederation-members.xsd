@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.6">
+    version="1.7">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -189,6 +189,13 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="orgID" type="members:orgIDREFType" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Organization ID of the federation member the grant has been made to.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
                 <xs:attribute name="lastVerified" type="xs:date" use="optional">
                     <xs:annotation>
                         <xs:documentation>
@@ -331,6 +338,18 @@
 
     <xs:simpleType name="orgIDType">
         <xs:restriction base="xs:ID">
+            <xs:annotation>
+                <xs:documentation>
+                    An organization ID is an XML ID constrained to be the string "ukforg"
+                    followed by a numeric code.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:pattern value="ukforg\d+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="orgIDREFType">
+        <xs:restriction base="xs:IDREF">
             <xs:annotation>
                 <xs:documentation>
                     An organization ID is an XML ID constrained to be the string "ukforg"
