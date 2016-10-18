@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.7">
+    version="1.7.1">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -336,6 +336,77 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="EntityID">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Describes an entity ID specifically permitted to this member.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleContent>
+                <xs:extension base="xs:anyURI">
+                    <xs:attribute name="lastVerified" type="xs:date" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The date on which this entity ID was last verified as being
+                                owned by the member.  May be omitted if the verification
+                                date is not known.
+
+                                Example:    "2010-12-31"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="verifiedBy" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Name or user ID of the person or group who last verified
+                                the entity ID as being owned by the member.  May be omitted
+                                for automatically generated elements.
+
+                                Examples:    "iay", "JTAG"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="source" type="xs:string" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                A human-readable description of the source of the association of this entity ID
+                                with the member.
+
+                                Examples:    "whois", "Nominet web site"
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                A URL providing more detailed information to go along with the
+                                @source attribute.  This need only be included when it adds
+                                information that would be hard to retrieve from other records.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="EntityIDs">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Describes a list of entity IDs specifically permitted to this member.
+
+                    This is normally only used for exceptional cases, such as "urn:" scheme
+                    entity IDs.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="EntityID" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:simpleType name="orgIDType">
         <xs:restriction base="xs:ID">
             <xs:annotation>
@@ -419,6 +490,8 @@
                         
                         <xs:element ref="members:Scopes" minOccurs="0" maxOccurs="unbounded"/>
                         
+                        <xs:element ref="members:EntityIDs" minOccurs="0" maxOccurs="1"/>
+
                     </xs:sequence>
 
                     <xs:attribute name="usesAthensIdP" use="optional" type="xs:boolean"/>
