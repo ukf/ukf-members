@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.7.1">
+    version="1.7.2">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -98,8 +98,6 @@
                     Potential uses include:
                     
                     * as a domain within an entity ID
-                    
-                    * as the member's PrimaryScope
                     
                     * as a Scope
                 </xs:documentation>
@@ -299,15 +297,6 @@
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="PrimaryScope" type="members:dnsNameType">
-        <xs:annotation>
-            <xs:documentation>
-                A member's "primary" scope is the name of the security domain
-                by which the member is most commonly identified.
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-
     <xs:element name="Scopes">
         <xs:complexType>
             <xs:annotation>
@@ -485,8 +474,6 @@
                         <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
 
                         <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
-                        
-                        <xs:element ref="members:PrimaryScope" minOccurs="0" maxOccurs="1"/>
                         
                         <xs:element ref="members:Scopes" minOccurs="0" maxOccurs="unbounded"/>
                         
