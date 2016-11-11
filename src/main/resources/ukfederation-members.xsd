@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.7.2">
+    version="1.7.3">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -77,6 +77,52 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:attributeGroup name="AuditAttributes">
+        <xs:annotation>
+            <xs:documentation>
+                This group of optional attributes can be used on an element to track manual operations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="lastVerified" type="xs:date" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    The date on which this element was last verified.
+                    May be omitted if the verification date is not known.
+
+                    Example:    "2010-12-31"
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="verifiedBy" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Name or user ID of the person or group who last verified
+                    the element.  May be omitted for automatically generated elements.
+
+                    Examples:    "iay", "JTAG"
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="source" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    A human-readable description of the source of the element.
+
+                    Examples:    "Call 1234"
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    A URL providing more detailed information to go along with the
+                    @source attribute.  This need only be included when it adds
+                    information that would be hard to retrieve from other records.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
     <xs:element name="Domain">
         <xs:complexType>
             <xs:annotation>
@@ -113,47 +159,7 @@
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
-                    <xs:attribute name="lastVerified" type="xs:date" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                The date on which this Domain was last verified as being
-                                owned by the member.  May be omitted if the verification
-                                date is not known.
-                                
-                                Example:    "2010-12-31"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="verifiedBy" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                Name or user ID of the person or group who last verified
-                                the Domain as being owned by the member.  May be omitted
-                                for automatically generated elements.
-                                
-                                Examples:    "iay", "JTAG"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="source" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                A human-readable description of the source of the association of this domain
-                                with the member.
-                                
-                                Examples:    "whois", "Nominet web site"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                A URL providing more detailed information to go along with the
-                                @source attribute.  This need only be included when it adds
-                                information that would be hard to retrieve from other records.
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
+                    <xs:attributeGroup ref="members:AuditAttributes"/>
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
@@ -194,46 +200,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:attribute name="lastVerified" type="xs:date" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            The date on which this grant was last verified.
-                            May be omitted if the verification
-                            date is not known.
-                            
-                            Example:    "2010-12-31"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="verifiedBy" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            Name or user ID of the person or group who last verified
-                            the grant.  May be omitted for automatically generated elements.
-                            
-                            Examples:    "iay", "JTAG"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="source" type="xs:string" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            A human-readable description of the source of the association of this domain
-                            with the member.
-                            
-                            Examples:    "Call 1234"
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
-                    <xs:annotation>
-                        <xs:documentation>
-                            A URL providing more detailed information to go along with the
-                            @source attribute.  This need only be included when it adds
-                            information that would be hard to retrieve from other records.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
+                <xs:attributeGroup ref="members:AuditAttributes"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -334,47 +301,7 @@
             </xs:annotation>
             <xs:simpleContent>
                 <xs:extension base="xs:anyURI">
-                    <xs:attribute name="lastVerified" type="xs:date" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                The date on which this entity ID was last verified as being
-                                owned by the member.  May be omitted if the verification
-                                date is not known.
-
-                                Example:    "2010-12-31"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="verifiedBy" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                Name or user ID of the person or group who last verified
-                                the entity ID as being owned by the member.  May be omitted
-                                for automatically generated elements.
-
-                                Examples:    "iay", "JTAG"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="source" type="xs:string" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                A human-readable description of the source of the association of this entity ID
-                                with the member.
-
-                                Examples:    "whois", "Nominet web site"
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                    <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
-                        <xs:annotation>
-                            <xs:documentation>
-                                A URL providing more detailed information to go along with the
-                                @source attribute.  This need only be included when it adds
-                                information that would be hard to retrieve from other records.
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
+                    <xs:attributeGroup ref="members:AuditAttributes"/>
                 </xs:extension>
             </xs:simpleContent>
         </xs:complexType>
@@ -392,6 +319,38 @@
             </xs:annotation>
             <xs:sequence>
                 <xs:element name="EntityID" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ApprovedEntityAttribute">
+        <xs:annotation>
+            <xs:documentation>
+                Describes an entity attribute specifically permitted to an
+                entity owned by this member.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="Name" use="required" type="xs:anyURI"/>
+            <xs:attribute name="NameFormat" use="required" type="xs:anyURI"/>
+            <xs:attribute name="Value" use="required" type="xs:anySimpleType"/>
+            <xs:attribute name="entityID" use="required" type="xs:anyURI"/>
+            <xs:attributeGroup ref="members:AuditAttributes"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ApprovedEntityAttributes">
+        <xs:annotation>
+            <xs:documentation>
+                Describes a list of entity attributes specifically permitted to entities
+                owned by this member.
+
+                This is normally only used for exceptional cases.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="members:ApprovedEntityAttribute" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -478,6 +437,8 @@
                         <xs:element ref="members:Scopes" minOccurs="0" maxOccurs="unbounded"/>
                         
                         <xs:element ref="members:EntityIDs" minOccurs="0" maxOccurs="1"/>
+
+                        <xs:element ref="members:ApprovedEntityAttributes" minOccurs="0" maxOccurs="1"/>
 
                     </xs:sequence>
 
