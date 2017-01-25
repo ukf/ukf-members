@@ -291,4 +291,43 @@ public class MembersTest {
         final MembersElement membersElement = members.getMembersElement();
         membersElement.getMember().get(0);
     }
+
+    @Test
+    public void duplicateDomain() throws Exception {
+        // straightforward: two Members
+        try {
+            new Members(fetchDocument("duplicateDomain.xml"));
+            Assert.fail("expected component initialization exception");
+        } catch (final ComponentInitializationException e) {
+            // expected
+            Assert.assertTrue(e.getMessage().contains("domain"), "wrong message");
+            Assert.assertTrue(e.getMessage().contains("appears in multiple participants"), "wrong message");
+        }
+    }
+
+    @Test
+    public void duplicateDomainSingle() throws Exception {
+        // twice in the same member
+        try {
+            new Members(fetchDocument("duplicateDomain2.xml"));
+            Assert.fail("expected component initialization exception");
+        } catch (final ComponentInitializationException e) {
+            // expected
+            Assert.assertTrue(e.getMessage().contains("domain"), "wrong message");
+            Assert.assertTrue(e.getMessage().contains("more than once"), "wrong message");
+        }
+    }
+
+    @Test
+    public void duplicateDomainMix() throws Exception {
+        // one Member, one DomainOwner
+        try {
+            new Members(fetchDocument("duplicateDomain3.xml"));
+            Assert.fail("expected component initialization exception");
+        } catch (final ComponentInitializationException e) {
+            // expected
+            Assert.assertTrue(e.getMessage().contains("domain"), "wrong message");
+            Assert.assertTrue(e.getMessage().contains("appears in multiple participants"), "wrong message");
+        }
+    }
 }

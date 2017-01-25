@@ -40,7 +40,9 @@ import org.xml.sax.SAXException;
 
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import uk.org.ukfederation.members.jaxb.BaseGrantType;
+import uk.org.ukfederation.members.jaxb.DomainElement;
 import uk.org.ukfederation.members.jaxb.DomainOwnerElement;
+import uk.org.ukfederation.members.jaxb.DomainsElement;
 import uk.org.ukfederation.members.jaxb.GrantsElement;
 import uk.org.ukfederation.members.jaxb.MemberElement;
 import uk.org.ukfederation.members.jaxb.MembersElement;
@@ -78,6 +80,12 @@ public class Members {
     private Map<String, List<String>> pushedScopes;
     
     /**
+     * A {@link Map} recording the (single) participant registered as owning a
+     * given domain.
+     */
+    private Map<String, ParticipantType> domainOwners = new HashMap<>();
+
+    /**
      * Constructs a {@link Members} object from an XML document.
      * 
      * This constructor validates against the schema document passed as parameter.
@@ -95,11 +103,17 @@ public class Members {
         // Index members.
         for (final MemberElement member : membersElement.getMember()) {
             addParticipant(member);
+            if (member.getDomains() != null) {
+                addParticipantDomains(member, member.getDomains());
+            }
         }
         
         // Index domain owners.
         for (final DomainOwnerElement domainOwner : membersElement.getDomainOwner()) {
             addParticipant(domainOwner);
+            if (domainOwner.getDomains() != null) {
+                addParticipantDomains(domainOwner, domainOwner.getDomains());
+            }
         }
         
         /*
@@ -182,6 +196,36 @@ public class Members {
             throw new ComponentInitializationException("duplicate participant name in members document: " + name);
         } else {
             participantByName.put(name, participant);
+        }
+    }
+
+    /**
+     * Records the domains registered to a particular participant.
+     *
+     * @param participant participant owning at least one domain
+     * @param domainsElement the {@link DomainsElement} for the participant
+     * @throws ComponentInitializationException if a domain is registered to more than one participant
+     */
+    private void addParticipantDomains(@Nonnull final ParticipantType participant,
+            @Nonnull final DomainsElement domainsElement)
+        throws ComponentInitializationException {
+        for (final DomainElement domainElement : domainsElement.getDomain()) {
+            final String domain = domainElement.getValue();
+            final ParticipantType previousParticipant = domainOwners.get(domain);
+            if (previousParticipant == null) {
+                // not previously registered, OK
+                domainOwners.put(domain, participant);
+            } else if (previousParticipant == participant) {
+                // two registrations in a single participant
+                throw new ComponentInitializationException("participant \"" + participant.getName() +
+                        "\" registers domain \"" + domain + "\" more than once");
+            } else {
+                // two different participants
+                throw new ComponentInitializationException("domain \"" + domain +
+                        "\" appears in multiple participants: " +
+                        "\"" + previousParticipant.getName() + "\", " + 
+                        "\"" + participant.getName() + "\"");
+            }
         }
     }
 

@@ -1,5 +1,9 @@
 # Release Notes for `ukf-members`
 
+## Version 1.5.0 ##
+
+* Detect registration of domains to more than one participant.
+
 ## Version 1.4.0 ##
 
 * Schema V1.7 updates:
