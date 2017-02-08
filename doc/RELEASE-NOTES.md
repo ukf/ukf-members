@@ -1,5 +1,10 @@
 # Release Notes for `ukf-members`
 
+## Version 1.6.0 ##
+
+* Updated schema to 1.8.0:
+	* remove `usesAthensIdP`
+
 ## Version 1.5.0 ##
 
 * Detect registration of domains to more than one participant.

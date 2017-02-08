@@ -4,7 +4,7 @@
     targetNamespace="http://ukfederation.org.uk/2007/01/members"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
-    version="1.7.3">
+    version="1.8.0">
 
     <xs:simpleType name="dnsNameType">
         <xs:restriction base="xs:string">
@@ -441,8 +441,6 @@
                         <xs:element ref="members:ApprovedEntityAttributes" minOccurs="0" maxOccurs="1"/>
 
                     </xs:sequence>
-
-                    <xs:attribute name="usesAthensIdP" use="optional" type="xs:boolean"/>
                 </xs:extension>
             </xs:complexContent>
 
