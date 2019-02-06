@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bindings xmlns="http://java.sun.com/xml/ns/jaxb" version="2.1">
     
-    <bindings schemaLocation="ukfederation-members.xsd">
+    <bindings schemaLocation="../resources/ukfederation-members.xsd">
         <schemaBindings>
             <nameXmlTransform>
                 <elementName suffix="Element"/>

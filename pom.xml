@@ -58,6 +58,12 @@
 
         <!-- Test dependencies -->
 
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -66,10 +72,16 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>1.5</version>
+                <version>2.4</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <schemaDirectory>${project.basedir}/src/main/resources</schemaDirectory>
-                    <bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+                    <sources>${project.basedir}/src/main/resources</sources>
                     <packageName>uk.org.ukfederation.members.jaxb</packageName>
                     <clearOutputDir>true</clearOutputDir>
                 </configuration>

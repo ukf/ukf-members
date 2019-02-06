@@ -4,6 +4,7 @@
 
 * Updated schema to 1.8.0:
 	* remove `usesAthensIdP`
+* Updated to use the latest version of `latest jaxb2-maven-plugin`
 
 ## Version 1.5.0 ##
 
