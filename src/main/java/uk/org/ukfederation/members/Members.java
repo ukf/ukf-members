@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
+import net.shibboleth.shared.component.ComponentInitializationException;
 import uk.org.ukfederation.members.jaxb.BaseGrantType;
 import uk.org.ukfederation.members.jaxb.DomainElement;
 import uk.org.ukfederation.members.jaxb.DomainOwnerElement;

@@ -5,13 +5,13 @@
 
     <parent>
         <groupId>net.shibboleth</groupId>
-        <artifactId>parent-v3</artifactId>
-        <version>9</version>
+        <artifactId>parent</artifactId>
+        <version>17.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>uk.org.ukfederation</groupId>
     <artifactId>ukf-members</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>UK federation members API</name>
@@ -20,23 +20,40 @@
     <inceptionYear>2011</inceptionYear>
 
     <properties>
-        <java-support.version>7.2.0</java-support.version>
+        <shib-support.version>9.0.0-SNAPSHOT</shib-support.version>
+        <!--
+            Override the JAXB version we get from the parent POM,
+            so that we are still working in the javax namespace
+            rather than under jakarta.
+        -->
+        <jakarta.jaxb-api.version>2.3.3</jakarta.jaxb-api.version>
+        <jakarta.jaxb-impl.version>2.3.7</jakarta.jaxb-impl.version>
     </properties>
 
     <repositories>
         <repository>
-            <id>shib-release</id>
-            <url>https://build.shibboleth.net/nexus/content/groups/public</url>
+            <id>shibboleth-releases</id>
+            <name>Shibboleth Releases Repository</name>
+            <url>https://build.shibboleth.net/maven/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
         </repository>
         <repository>
-            <id>shib-snapshot</id>
-            <url>https://build.shibboleth.net/nexus/content/repositories/snapshots</url>
+            <id>shibboleth-snapshots</id>
+            <name>Shibboleth Snapshots Repository</name>
+            <url>https://build.shibboleth.net/maven/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
         </repository>
     </repositories>
 
@@ -49,19 +66,32 @@
             <artifactId>jsr305</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.shibboleth.utilities</groupId>
-            <artifactId>java-support</artifactId>
-            <version>${java-support.version}</version>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.shibboleth</groupId>
+            <artifactId>shib-support</artifactId>
+            <version>${shib-support.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!-- Runtime dependencies -->
 
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Test dependencies -->
 
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -72,14 +102,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.4</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>javax.activation</groupId>
-                        <artifactId>activation</artifactId>
-                        <version>1.1.1</version>
-                    </dependency>
-                </dependencies>
+                <version>2.5.0</version>
                 <configuration>
                     <sources>${project.basedir}/src/main/resources</sources>
                     <packageName>uk.org.ukfederation.members.jaxb</packageName>
