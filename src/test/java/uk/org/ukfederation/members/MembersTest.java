@@ -19,7 +19,6 @@ package uk.org.ukfederation.members;
 import java.io.InputStream;
 import java.util.List;
 
-import javax.xml.bind.UnmarshalException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -29,6 +28,7 @@ import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
+import jakarta.xml.bind.UnmarshalException;
 import net.shibboleth.shared.component.ComponentInitializationException;
 import uk.org.ukfederation.members.jaxb.DomainOwnerElement;
 import uk.org.ukfederation.members.jaxb.MemberElement;

@@ -21,13 +21,8 @@
 
     <properties>
         <shib-support.version>9.0.0-SNAPSHOT</shib-support.version>
-        <!--
-            Override the JAXB version we get from the parent POM,
-            so that we are still working in the javax namespace
-            rather than under jakarta.
-        -->
-        <jakarta.jaxb-api.version>2.3.3</jakarta.jaxb-api.version>
-        <jakarta.jaxb-impl.version>2.3.7</jakarta.jaxb-impl.version>
+        <jakarta.jaxb-api.version>3.0.1</jakarta.jaxb-api.version>
+        <jakarta.jaxb-impl.version>3.0.2</jakarta.jaxb-impl.version>
     </properties>
 
     <repositories>
@@ -68,6 +63,7 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta.jaxb-api.version}</version>
         </dependency>
         <dependency>
             <groupId>net.shibboleth</groupId>
@@ -84,6 +80,7 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
+            <version>${jakarta.jaxb-impl.version}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -102,7 +99,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.5.0</version>
+                <version>3.1.0</version>
                 <configuration>
                     <sources>${project.basedir}/src/main/resources</sources>
                     <packageName>uk.org.ukfederation.members.jaxb</packageName>
