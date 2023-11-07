@@ -93,25 +93,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <dependencies>
-                    <!-- add optional Markdown processor -->
-                    <dependency>
-                        <groupId>org.apache.maven.doxia</groupId>
-                        <artifactId>doxia-module-markdown</artifactId>
-                        <version>1.6</version>
-                    </dependency>
-                    <!-- support DAV protocol for site deploy -->
-                    <dependency>
-                        <groupId>org.apache.maven.wagon</groupId>
-                        <artifactId>wagon-webdav-jackrabbit</artifactId>
-                        <version>2.10</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
         </plugins>
 
     </build>
@@ -133,17 +114,14 @@
 
     <distributionManagement>
         <repository>
-            <id>ukf-release</id>
-            <url>https://apps.iay.org.uk/nexus/content/repositories/ukf</url>
+            <id>ukf-packages</id>
+            <url>https://maven.pkg.github.com/ukf/packages</url>
         </repository>
+        <!-- Normally redundant, but we need to override the parent POM. -->
         <snapshotRepository>
-            <id>ukf-snapshot</id>
-            <url>https://apps.iay.org.uk/nexus/content/repositories/ukf-snapshots</url>
+            <id>ukf-packages</id>
+            <url>https://maven.pkg.github.com/ukf/packages</url>
         </snapshotRepository>
-        <site>
-            <id>ukf-site</id>
-            <url>dav:https://apps.iay.org.uk/nexus/content/sites/site/${project.artifactId}/${project.version}/</url>
-        </site>
     </distributionManagement>
 
 </project>
