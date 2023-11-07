@@ -154,17 +154,14 @@
 
     <distributionManagement>
         <repository>
-            <id>ukf-release</id>
-            <url>https://apps.iay.org.uk/nexus/content/repositories/ukf</url>
+            <id>ukf-packages</id>
+            <url>https://maven.pkg.github.com/ukf/packages</url>
         </repository>
+        <!-- Normally redundant, but we need to override the parent POM. -->
         <snapshotRepository>
-            <id>ukf-snapshot</id>
-            <url>https://apps.iay.org.uk/nexus/content/repositories/ukf-snapshots</url>
+            <id>ukf-packages</id>
+            <url>https://maven.pkg.github.com/ukf/packages</url>
         </snapshotRepository>
-        <site>
-            <id>ukf-site</id>
-            <url>dav:https://apps.iay.org.uk/nexus/content/sites/site/${project.artifactId}/${project.version}/</url>
-        </site>
     </distributionManagement>
 
 </project>
