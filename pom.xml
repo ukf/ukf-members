@@ -20,7 +20,8 @@
     <inceptionYear>2011</inceptionYear>
 
     <properties>
-        <shib-support.version>9.0.0</shib-support.version>
+        <shib-shared.groupId>net.shibboleth</shib-shared.groupId>
+        <shib-shared.version>9.1.2</shib-shared.version>
         <jakarta.jaxb-api.version>3.0.1</jakarta.jaxb-api.version>
         <jakarta.jaxb-impl.version>3.0.2</jakarta.jaxb-impl.version>
     </properties>
@@ -66,9 +67,9 @@
             <version>${jakarta.jaxb-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.shibboleth</groupId>
+            <groupId>${shib-shared.groupId}</groupId>
             <artifactId>shib-support</artifactId>
-            <version>${shib-support.version}</version>
+            <version>${shib-shared.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
