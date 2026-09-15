@@ -1,5 +1,11 @@
 # Release Notes for `ukf-members`
 
+
+## Version 2.0.1 ##
+
+* Upgraded `net.shibboleth` version from 17.1.2 to 17.2.1
+* Upgraded `shib-shared` version from 9.1.2 to 9.2.1
+
 ## Version 1.6.0 ##
 
 * Updated schema to 1.8.0:
